@@ -24,13 +24,14 @@ class AppConstants {
   static const String userProfileEndpoint = '/users/me';
 
   // Muscle Groups
-  static const Map<String, String> muscleGroups = {
+  static const Map<String, String> bodyparts = {
     'all': 'All Exercises',
     'chest': 'Chest',
     'back': 'Back',
     'legs': 'Legs',
     'shoulders': 'Shoulders',
-    'arms': 'Arms',
+    'triceps': 'Triceps',
+    'biceps': 'Biceps',
     'core': 'Core',
     'full-body': 'Full Body',
   };
