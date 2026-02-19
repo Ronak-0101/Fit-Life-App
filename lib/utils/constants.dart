@@ -28,7 +28,7 @@ class AppConstants {
     'all': 'All Exercises',
     'chest': 'Chest',
     'back': 'Back',
-    'legs': 'Legs',
+    'legss': 'Legs',
     'shoulders': 'Shoulders',
     'triceps': 'Triceps',
     'biceps': 'Biceps',
