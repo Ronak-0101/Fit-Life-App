@@ -21,7 +21,7 @@ class WorkoutCategoryScreen extends StatelessWidget {
         title: Text('$categoryLabel Workouts'),
       ),
       body: FutureBuilder<List<Exercise>>(
-        future: ExerciseService.getExerciseByMuscleGroups(categoryKey),
+        future: ExerciseService.getExerciseByBodyparts(categoryKey),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

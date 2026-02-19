@@ -7,6 +7,14 @@ import 'package:http/http.dart';
 
 class ExerciseService {
 
+  // // GET EXERCISES BY BODY PARTS
+  // static Future<List<Exercise>> getExerciseByBodyparts(String bodypart)async {
+  //   final response = await ApiService.get(
+  //     '${AppConstants.baseUrl}/bodyparts/$bodypart',
+  //     includeAuth: false
+  //   );
+  // }
+
   // GET EXERCISES BY MUSCLE GROUPS
   static Future<List<Exercise>> getExerciseByMuscleGroups(
       String muscleGroup) async {
@@ -52,11 +60,8 @@ class ExerciseService {
   // GET EXERCISEX BY BODY PARTS
   static Future<List<Exercise>> getExerciseByBodyparts(String bodypart) async {
     final response = await ApiService.get(
-      AppConstants.baseUrl,
+      '${AppConstants.exercisesEndpoint}/bodyparts/$bodypart',
       includeAuth: false,
-      queryParams: {
-        'bodypart': bodypart,
-      }
     );
 
     if (response.statusCode != 200) {
