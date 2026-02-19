@@ -1,5 +1,5 @@
 import 'package:fit_life_app_/models/exercise.dart';
-import 'package:fit_life_app_/screens/home/workout_detail_screen.dart';
+import 'package:fit_life_app_/screens/exercises/workout_detail_screen.dart';
 import 'package:fit_life_app_/services/exercise_service.dart';
 import 'package:fit_life_app_/utils/app_colors.dart';
 import 'package:flutter/material.dart';
