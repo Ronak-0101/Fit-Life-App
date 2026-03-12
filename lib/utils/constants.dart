@@ -22,6 +22,7 @@ class AppConstants {
   static const String nutritionEndpoint = '/nutrition';
   static const String progressEndpoint = '/progress';
   static const String userProfileEndpoint = '/users/me';
+  static const String bodypartEndpoint = '/exercises/bodyparts/';
 
   // Muscle Groups
   static const Map<String, String> bodyparts = {

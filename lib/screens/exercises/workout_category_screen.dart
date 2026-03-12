@@ -12,7 +12,7 @@ class WorkoutCategoryScreen extends StatelessWidget {
     super.key,
     required this.categoryLabel,
     required this.categoryKey,
-  }); 
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,72 +20,87 @@ class WorkoutCategoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('$categoryLabel Workouts'),
       ),
-      body: FutureBuilder<List<Exercise>>(
-        future: ExerciseService.getExerciseByBodyparts(categoryKey),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              end: Alignment.bottomRight,
+              begin: Alignment.topLeft,
+              colors: [
+                AppColors.primary.withOpacity(0.2),
+                AppColors.secondary.withOpacity(0.2)
+              ],
+            ),
+          ),
+          child: FutureBuilder<List<Exercise>>(
+            future: ExerciseService.getExerciseByBodyparts(categoryKey),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          if (snapshot.hasError) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text(
-                  'Could not load workout right now \n${snapshot.error}',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
-          }
-
-          final exercises = snapshot.data ?? [];
-
-          if (exercises.isEmpty) {
-            return const Center(
-              child: Text(
-                'No Workouts available for this category yet...',
-              ),
-            );
-          }
-
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: exercises.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final exercise = exercises[index];
-              return Card(
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(12),
-                  leading: CircleAvatar(
-                    backgroundColor: AppColors.primary.withOpacity(0.15),
-                    child: const Icon(
-                      Icons.fitness_center,
-                      color: AppColors.primary,
+              if (snapshot.hasError) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      'Could not load workout right now \n${snapshot.error}',
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  title: Text(
-                    exercise.name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                );
+              }
+
+              final exercises = snapshot.data ?? [];
+
+              if (exercises.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No Workouts available for this category yet...',
                   ),
-                  subtitle: Text(
-                    '${exercise.type} • ${exercise.difficulty}',
-                  ),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const WorkoutDetailScreen(),
+                );
+              }
+
+              return ListView.separated(
+                padding: const EdgeInsets.all(16),
+                itemCount: exercises.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final exercise = exercises[index];
+                  return Card(
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(12),
+                      leading: CircleAvatar(
+                        backgroundColor: AppColors.primary.withOpacity(0.15),
+                        child: const Icon(
+                          Icons.fitness_center,
+                          color: AppColors.primary,
+                        ),
                       ),
-                    );
-                  },
-                ),
+                      title: Text(
+                        exercise.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        '${exercise.type} • ${exercise.difficulty}',
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const WorkoutDetailScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }

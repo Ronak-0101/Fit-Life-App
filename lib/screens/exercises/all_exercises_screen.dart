@@ -1,7 +1,6 @@
 import 'package:fit_life_app_/screens/exercises/workout_category_screen.dart';
 import 'package:fit_life_app_/utils/app_colors.dart';
 import 'package:fit_life_app_/utils/constants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AllExercisesScreen extends StatefulWidget {
@@ -18,9 +17,10 @@ class _AllExercisesScreenState extends State<AllExercisesScreen> {
         .where((entry) => entry.key != 'all')
         .toList();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('All Workouts'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('All Workouts'),
+      //   backgroundColor: Colors.grey.shade400,
+      // ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Container(
@@ -42,7 +42,7 @@ class _AllExercisesScreenState extends State<AllExercisesScreen> {
               final category = categories[index];
 
               return SizedBox(
-                height: 200,
+                height: 150,
                 child: Card(
                   child: ListTile(
                     contentPadding:

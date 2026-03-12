@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:fit_life_app_/models/exercise.dart';
 import 'package:fit_life_app_/services/api_service.dart';
 import 'package:fit_life_app_/utils/constants.dart';
-import 'package:http/http.dart';
 
 class ExerciseService {
 
@@ -14,7 +13,7 @@ class ExerciseService {
   //     includeAuth: false
   //   );
   // }
-
+                                                                                  
   // GET EXERCISES BY MUSCLE GROUPS
   static Future<List<Exercise>> getExerciseByMuscleGroups(
       String muscleGroup) async {
@@ -60,7 +59,7 @@ class ExerciseService {
   // GET EXERCISEX BY BODY PARTS
   static Future<List<Exercise>> getExerciseByBodyparts(String bodypart) async {
     final response = await ApiService.get(
-      '${AppConstants.exercisesEndpoint}/bodyparts/$bodypart',
+      '${AppConstants.bodypartEndpoint}$bodypart',
       includeAuth: false,
     );
 

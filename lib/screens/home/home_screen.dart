@@ -1,12 +1,9 @@
 import 'package:fit_life_app_/screens/Splits/create_splits.dart';
 import 'package:fit_life_app_/screens/exercises/all_exercises_screen.dart';
-import 'package:fit_life_app_/screens/exercises/workout_category_screen.dart';
 import 'package:fit_life_app_/screens/nutrition/nutrition_screen.dart';
 import 'package:fit_life_app_/screens/profile/profile_screen.dart';
 import 'package:fit_life_app_/screens/progress/progress_screen.dart';
 import 'package:fit_life_app_/utils/app_colors.dart';
-import 'package:fit_life_app_/utils/constants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,6 +15,63 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  int _activeSlide = 0;
+  late final PageController _sliderController;
+
+  static const List<_QuickSlideItem> _quickSlides = [
+    _QuickSlideItem(
+      imageUrl:
+          'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1200&q=80',
+      tabIndex: 0,
+      semanticLabel: 'All Workout Slide',
+    ),
+    _QuickSlideItem(
+      imageUrl:
+          'https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?auto=format&fit=crop&w=1200&q=80',
+      tabIndex: 1,
+      semanticLabel: 'Create splits slide',
+    ),
+    _QuickSlideItem(
+      imageUrl:
+          'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80',
+      tabIndex: 2,
+      semanticLabel: 'Nutrition Slide',
+    ),
+    _QuickSlideItem(
+      imageUrl:
+          'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80',
+      tabIndex: 3,
+      semanticLabel: 'Progress Slide',
+    ),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _sliderController = PageController(viewportFraction: 0.9);
+  }
+
+  @override
+  void dispose() {
+    _sliderController.dispose();
+    super.dispose();
+  }
+
+  void _onSlideAction(int tabIndex) {
+    setState(() {
+      _selectedIndex = tabIndex;
+    });
+  }
+
+  void _moveSlide(int direction) {
+    final nextSlide =
+        (_activeSlide + direction).clamp(0, _quickSlides.length - 1);
+    _sliderController.animateToPage(
+      nextSlide,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +86,121 @@ class _HomeScreenState extends State<HomeScreen> {
       ProfileScreen(),
     ];
 
-    //
+    final contentStack = IndexedStack(
+      index: _selectedIndex,
+      children: screens,
+    );
+
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: screens,
+      appBar: _selectedIndex == 0 ? AppBar(
+        title: const Text('All Workouts'),
+      ): null,
+      body: SafeArea(
+        child: _selectedIndex == 0
+            ? Column(
+                children: [
+                  SizedBox(
+                    height: 250,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        PageView.builder(
+                          controller: _sliderController,
+                          itemCount: _quickSlides.length,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _activeSlide = index;
+                            });
+                          },
+                          itemBuilder: (contex, index) {
+                            final slide = _quickSlides[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 10),
+                              child: InkWell(
+                                onTap: () => _onSlideAction(slide.tabIndex),
+                                borderRadius: BorderRadius.circular(20),
+                                child: Ink(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        Image.network(
+                                          slide.imageUrl,
+                                          fit: BoxFit.cover,
+                                          semanticLabel: slide.semanticLabel,
+                                        ),
+                                        DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.15),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        // Positioned(
+                        //   left: 2,
+                        //   child: CircleAvatar(
+                        //     backgroundColor: Colors.black.withOpacity(0.3),
+                        //     child: IconButton(
+                        //       icon: const Icon(Icons.chevron_left, size: 24),
+                        //       color: Colors.white,
+                        //       onPressed: _activeSlide == 0
+                        //           ? null
+                        //           : () => _moveSlide(-1),
+                        //     ),
+                        //   ),
+                        // ),
+                        // Positioned(
+                        //   right: 2,
+                        //   child: CircleAvatar(
+                        //     backgroundColor: Colors.black.withOpacity(0.3),
+                        //     child: IconButton(
+                        //       icon: const Icon(Icons.chevron_right_rounded,
+                        //           size: 24),
+                        //       color: Colors.white,
+                        //       onPressed: _activeSlide == _quickSlides.length - 1
+                        //           ? null
+                        //           : () => _moveSlide(-1),
+                        //     ),
+                        //   ),
+                        // )
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      _quickSlides.length,
+                      (index) => AnimatedContainer(
+                        duration: const Duration(microseconds: 250),
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        height: 8,
+                        width: _activeSlide == index ? 22 : 8,
+                        decoration: BoxDecoration(
+                          color: _activeSlide == index
+                              ? AppColors.primary
+                              : AppColors.primary.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(child: contentStack),
+                ],
+              )
+            : contentStack,
       ),
       bottomNavigationBar: NavigationBar(
         elevation: 0,
@@ -83,4 +247,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+class _QuickSlideItem {
+  const _QuickSlideItem({
+    required this.imageUrl,
+    required this.tabIndex,
+    required this.semanticLabel,
+  });
+
+  final String imageUrl;
+  final int tabIndex;
+  final String semanticLabel;
 }
