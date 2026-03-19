@@ -7,6 +7,19 @@ import 'package:fit_life_app_/utils/storage.dart';
 // import 'api_service.dart';
 
 class AuthService {
+
+  static Map<String, dynamic> _parseResponseBody(String body) {
+    try {
+      final decoded = jsonDecode(body);
+      if (decoded is Map<String, dynamic>) {
+        return decoded;
+      }
+      return {'data': decoded};
+    } catch (_) {
+      return {'raw': body};
+    }
+  }
+
   // Login User
   static Future<Map<String, dynamic>> login({
     required String email,
@@ -21,7 +34,8 @@ class AuthService {
         },
         includeAuth: false,
       );
-      final responseData = jsonDecode(response.body);
+      // final responseData = jsonDecode(response.body);
+      final responseData = _parseResponseBody(response.body);
 
       if (response.statusCode == 200 && responseData['success'] == true) {
         // Save token and user data
@@ -71,20 +85,23 @@ class AuthService {
         includeAuth: false,
       );
 
-      final responseData = jsonDecode(response.body);
+      // final responseData = jsonDecode(response.body);
+      final responseData = _parseResponseBody(response.body);
+      final isSuccessStatus = response.statusCode >= 200 && response.statusCode < 300;
+      final isSuccessFlag = responseData['success'] != false;
 
-      if ((response.statusCode == 200 || response.statusCode == 201) &&
-          responseData['success'] == true) {
+      if (isSuccessStatus && isSuccessFlag) {
         return {
           'success': true,
-          'message': 'Registration Successfull',
+          'message': responseData['message'] ?? 'Registration Successfull',
           'token': responseData['token'],
           'user': responseData['user'],
         };
       } else {
+        final fallback = responseData['raw']?.toString();
         return {
           'success': false,
-          'message': responseData['message'] ?? 'Registration Failed',
+          'message': responseData['message'] ?? fallback ?? 'Registration Failed',
         };
       }
     } catch (e) {
@@ -124,7 +141,28 @@ class AuthService {
   }
 
   // Logout
-  static Future<void> logout() {
-    return StorageService.clearAll();
+  static Future<Map<String, dynamic>> logout() async {
+    try {
+      final response = await ApiService.post(
+        AppConstants.logoutEndpoint,
+        includeAuth: true,
+      );
+
+      final responseData = _parseResponseBody(response.body);
+      final isSuccess = response.statusCode >= 200 && response.statusCode < 300;
+
+      await StorageService.clearAll();
+
+      return {
+        'success': isSuccess,
+        'message': responseData['message'] ?? 'Logged out successfully',
+      };
+    } catch (e) {
+      await StorageService.clearAll();
+      return {
+        'success': false,
+        'message': 'Logged out locally. Network error: ${e.toString()}',
+      };
+    }
   }
 }

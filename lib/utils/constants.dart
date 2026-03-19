@@ -19,6 +19,7 @@ class AppConstants {
   static const String currentUserEndpoint = '/auth/me';
   static const String exercisesEndpoint = '/exercises';
   static const String workoutsEndpoint = '/workouts';
+  static const String logoutEndpoint = '/auth/logout';
   static const String nutritionEndpoint = '/nutrition';
   static const String progressEndpoint = '/progress';
   static const String userProfileEndpoint = '/users/me';
@@ -34,7 +35,7 @@ class AppConstants {
     'triceps': 'Triceps',
     'biceps': 'Biceps',
     'core': 'Core',
-    'full-body': 'Full Body',
+    // 'full-body': 'Full Body',
   };
 
   // Exercise Difficulties

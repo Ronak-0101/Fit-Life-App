@@ -19,4 +19,13 @@ class AppColors {
   // Status
   static const Color success = Colors.green;
   static const Color error = Colors.red;
+
+  // Splash screen 
+  static const Color accentColor = Color(0xFFFF2A2E);
+  static const Color titleColor = Color(0xFFF9E9EA);
+  static const Color subtitleColor = Color(0xFFCFA9AE);
+  static const Color baseGlowColor = Color(0xFF8E171D);
+  static const Color darkCircleColor = Color(0xFF56383B);
+  static const Color darkProgressTrack = Color(0xFF5C4B4D);
+
 }
