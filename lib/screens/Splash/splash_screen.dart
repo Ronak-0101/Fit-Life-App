@@ -4,6 +4,8 @@ import 'package:fit_life_app_/utils/app_colors.dart';
 import 'package:fit_life_app_/utils/storage.dart';
 import 'package:flutter/material.dart';
 
+enum _SplashDestination { home, login }
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -12,13 +14,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   static const Duration _splashDuration = Duration(seconds: 3);
 
   late AnimationController _animationController;
-  late AnimationController _progressController;
+  // late AnimationController _progressController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+  late Future<_SplashDestination> _destinationFuture;
 
   @override
   void initState() {
@@ -29,10 +32,11 @@ class _SplashScreenState extends State<SplashScreen>
       vsync: this,
       duration: const Duration(seconds: 2),
     );
-    _progressController = AnimationController(
-      vsync: this,
-      duration: _splashDuration,
-    );
+
+    // _progressController = AnimationController(
+    //   vsync: this,
+    //   duration: _splashDuration,
+    // );
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
@@ -57,47 +61,74 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     // Start animation
+    // Start the splash animation while the next route is resolved in the background.
+    _destinationFuture = _resolveDestination();
     _animationController.forward();
-    _progressController.forward();
+    // _progressController.forward();
 
     //Navigate after delay
     _navigateToNextScreen();
   }
 
-  Future<void> _navigateToNextScreen() async {
-    // Wait for animation to complete (2 seconds) plus a little extraa
-    await Future.delayed(_splashDuration);
+  // Future<void> _navigateToNextScreen() async {
+  //   // Wait for animation to complete (2 seconds) plus a little extraa
+  //   await Future.delayed(_splashDuration);
 
     //Check if user is logged in
+    Future<_SplashDestination> _resolveDestination() async {
     final isLoggedIn = StorageService.isLoggedIn();
+
+    // if (!mounted) return;
+
+    // // Vavigate to appropriate screen
+    // if (isLoggedIn) {
+    //   // verify token is still valid by fetching user profile
+    //   final result = await AuthService.getCurrentUser();
+    if (!isLoggedIn) {
+      return _SplashDestination.login;
+    }
+
+      // if (!mounted) return;
+      final result = await AuthService.getCurrentUser();
+
+    //   if (result['success'] == true) {
+    //     // Token is valid, go to home
+    //     Navigator.pushReplacementNamed(context, '/home');
+    //   } else {
+    //     //Token expired, go to login
+    //     await StorageService.clearAll();
+    //     Navigator.pushReplacementNamed(context, '/login');
+    //   }
+    // } else {
+    //   // Not logged in go to login
+    //   Navigator.pushReplacementNamed(context, '/login');
+    if (result['success'] == true) {
+      return _SplashDestination.home;
+    }
+    await StorageService.clearAll();
+    return _SplashDestination.login;
+  }
+
+  Future<void> _navigateToNextScreen() async {
+    final results = await Future.wait<dynamic>([
+      Future.delayed(_splashDuration),
+      _destinationFuture,
+    ]);
 
     if (!mounted) return;
 
-    // Vavigate to appropriate screen
-    if (isLoggedIn) {
-      // verify token is still valid by fetching user profile
-      final result = await AuthService.getCurrentUser();
+    final destination = results[1] as _SplashDestination;
 
-      if (!mounted) return;
-
-      if (result['success'] == true) {
-        // Token is valid, go to home
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        //Token expired, go to login
-        await StorageService.clearAll();
-        Navigator.pushReplacementNamed(context, '/login');
-      }
-    } else {
-      // Not logged in go to login
-      Navigator.pushReplacementNamed(context, '/login');
-    }
+    Navigator.pushReplacementNamed(
+      context,
+      destination == _SplashDestination.home ? '/home' : '/login',
+    );
   }
 
   @override
   void dispose() {
     _animationController.dispose();
-    _progressController.dispose();
+    // _progressController.dispose();
     super.dispose();
   }
 
@@ -142,8 +173,9 @@ class _SplashScreenState extends State<SplashScreen>
             ),
             SafeArea(
               child: AnimatedBuilder(
-                animation:
-                    Listenable.merge([_animationController, _progressController]),
+                // animation:
+                //     Listenable.merge([_animationController, _progressController]),
+                animation: _animationController,
                 builder: (context, child) {
                   return Opacity(
                     opacity: _fadeAnimation.value,
@@ -238,14 +270,16 @@ class _SplashScreenState extends State<SplashScreen>
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(999),
-                              child: LinearProgressIndicator(
+                              child: const LinearProgressIndicator(
                                 minHeight: 6,
-                                value: _progressController.value,
-                                valueColor: const AlwaysStoppedAnimation<Color>(
+                                // value: _progressController.value,
+                                // valueColor: const AlwaysStoppedAnimation<Color>(
+                                valueColor: AlwaysStoppedAnimation<Color>(
                                   AppColors.accentColor,
                                 ),
-                                backgroundColor:
-                                    AppColors.darkProgressTrack.withOpacity(0.75),
+                                // backgroundColor:
+                                //     AppColors.darkProgressTrack.withOpacity(0.75),
+                                backgroundColor: AppColors.darkProgressTrack,
                               ),
                             ),
                           ),
