@@ -7,7 +7,7 @@ class AppColors {
   static const Color seed = Color(0xFF4A90E2);
 
   // Backgrounds
-  static const Color background = Color(0xFFF5F5F5);
+  static const Color background = Colors.black;
   static const Color scaffold = Colors.white;
 
   static const Color foreground = Colors.black87;
@@ -20,12 +20,19 @@ class AppColors {
   static const Color success = Colors.green;
   static const Color error = Colors.red;
 
+  // Logo Color
+  static const Color logoColor = Color(0xFFFF2A2E);
+
   // Splash screen 
   static const Color accentColor = Color(0xFFFF2A2E);
   static const Color titleColor = Color(0xFFF9E9EA);
-  static const Color subtitleColor = Color(0xFFCFA9AE);
+  static const Color subtitleColor = Color.fromARGB(255, 154, 131, 134);
   static const Color baseGlowColor = Color(0xFF8E171D);
   static const Color darkCircleColor = Color(0xFF56383B);
   static const Color darkProgressTrack = Color(0xFF5C4B4D);
+
+  //
+  static const Color backgroundLogin = Colors.black;
+  static const Color textboxBG = Color(0xFF1C1C1E);
 
 }
