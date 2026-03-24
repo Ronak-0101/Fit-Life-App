@@ -1,6 +1,7 @@
 import 'package:fit_life_app_/screens/Splash/splash_screen.dart';
 import 'package:fit_life_app_/screens/auth/login_screen.dart';
 import 'package:fit_life_app_/screens/auth/register_screen.dart';
+import 'package:fit_life_app_/screens/home/Bottom_nav_bar.dart';
 import 'package:fit_life_app_/screens/home/home_screen.dart';
 import 'package:fit_life_app_/utils/app_colors.dart';
 import 'package:fit_life_app_/utils/storage.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      home: const BottomNavBar(),
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),

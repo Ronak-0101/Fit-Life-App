@@ -35,4 +35,8 @@ class AppColors {
   static const Color backgroundLogin = Colors.black;
   static const Color textboxBG = Color(0xFF1C1C1E);
 
+  // Register textfield
+  static const Color registerTxtField = Color(0xFF302E2E);
+  static const Color registerContainerBG = Color(0xFF1F1E1E);
+
 }

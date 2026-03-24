@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: AppColors.subtitleColor,
                                       ),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       'FORGOT PASSWORD?',
                                       style: GoogleFonts.montserrat(
@@ -215,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   contentPadding:
-                                      EdgeInsets.symmetric(vertical: 25),
+                                      const EdgeInsets.symmetric(vertical: 25),
                                   fillColor: AppColors.textboxBG,
                                   prefixIcon: const Icon(Icons.lock),
                                   hintText: '.......',
@@ -308,7 +308,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RegisterScreen(),
+                                builder: (context) => const RegisterScreen(),
                               ),
                             );
                           },
@@ -341,7 +341,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 50),
-                  Text(
+                  const Text(
                     'By logging in, you aggree to our Terms and Service and Privacy Policy',
                     textAlign: TextAlign.center,
                     style: TextStyle(
