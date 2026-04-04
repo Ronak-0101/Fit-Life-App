@@ -1,5 +1,4 @@
 import 'package:fit_life_app_/screens/auth/login_screen.dart';
-import 'package:fit_life_app_/screens/profile/profile_screen.dart';
 import 'package:fit_life_app_/services/auth_service.dart';
 import 'package:fit_life_app_/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen>
               fontSize: 30,
               color: AppColors.logoColor,
               fontWeight: FontWeight.bold,
-              letterSpacing: 2,
+              letterSpacing: 4,
             ),
           ),
         ),
@@ -430,7 +429,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => LoginScreen(),
+                                        builder: (context) => const LoginScreen(),
                                       ),
                                     );
                                   },

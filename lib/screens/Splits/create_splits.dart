@@ -8,6 +8,7 @@ class CreateSplits extends StatefulWidget {
 }
 
 class _CreateSplitsState extends State<CreateSplits> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,6 +16,7 @@ class _CreateSplitsState extends State<CreateSplits> {
         title: const Text('Create your own splits'),
       ),
       body: const Center(child: Text('Coming soon...')),
+      
     );
   }
 }

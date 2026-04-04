@@ -39,4 +39,9 @@ class AppColors {
   static const Color registerTxtField = Color(0xFF302E2E);
   static const Color registerContainerBG = Color(0xFF1F1E1E);
 
+  // Home page
+  static const Color widgetBG = Color(0xFF1F1E1E);
+
+  static const Color  widgetcolorbg = Color(0xFF323131);
+
 }

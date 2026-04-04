@@ -1,23 +1,25 @@
 import 'package:fit_life_app_/screens/Splits/create_splits.dart';
-import 'package:fit_life_app_/screens/exercises/all_exercises_screen.dart';
+// import 'package:fit_life_app_/screens/home/app_bottom_nav_bar.dart';
 import 'package:fit_life_app_/screens/home/home_screen.dart';
+import 'package:fit_life_app_/widgets/new_bottom_nav.dart';
 import 'package:fit_life_app_/screens/nutrition/nutrition_screen.dart';
 import 'package:fit_life_app_/screens/profile/profile_screen.dart';
 import 'package:fit_life_app_/screens/progress/progress_screen.dart';
-import 'package:fit_life_app_/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key});
+  const BottomNavBar({super.key, this.initialIndex = 0});
+
+  final int initialIndex;
 
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-  int _selectedIndex = 0;
-  int _activeSlide = 0;
-  late final PageController _sliderController;
+  // int _selectedIndex = 0;
+  // final int _activeSlide = 0;
+  // late final PageController _sliderController;
 
   // static const List<_QuickSlideItem> _quickSlides = [
   //   _QuickSlideItem(
@@ -45,12 +47,20 @@ class _BottomNavBarState extends State<BottomNavBar> {
   //     semanticLabel: 'Progress Slide',
   //   ),
   // ];
+  late int _selectedIndex;
 
   // @override
   // void initState() {
   //   super.initState();
   //   _sliderController = PageController(viewportFraction: 0.9);
   // }
+  static const List<Widget> _screens = [
+    HomeScreen(),
+    CreateSplits(),
+    NutritionScreen(),
+    ProgressScreen(),
+    ProfileScreen(),
+  ];
 
   // @override
   // void dispose() {
@@ -63,6 +73,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
   //     _selectedIndex = tabIndex;
   //   });
   // }
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex.clamp(0, _screens.length - 1);
+  }
 
   // void _moveSlide(int direction) {
   //   final nextSlide =
@@ -73,35 +88,43 @@ class _BottomNavBarState extends State<BottomNavBar> {
   //     curve: Curves.easeOut,
   //   );
   // }
+  void _onDestinationSelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     // final categories = AppConstants.bodyparts.entries
     //     .where((entry) => entry.key != 'all')
     //     .toList();
-    const screens = [
-      // AllExercisesScreen(),
-      // BottomNavBar(),
-      HomeScreen(),
-      CreateSplits(),
-      NutritionScreen(),
-      ProgressScreen(),
-      ProfileScreen(),
+    // const screens = [
+    // AllExercisesScreen(),
+    // BottomNavBar(),
+    //   HomeScreen(),
+    //   CreateSplits(),
+    //   NutritionScreen(),
+    //   ProgressScreen(),
+    //   ProfileScreen(),
 
-    ];
+    // ];
 
-    final contentStack = IndexedStack(
-      index: _selectedIndex,
-      children: screens,
-    );
+    // final contentStack = IndexedStack(
+    //   index: _selectedIndex,
+    //   children: screens,
+    // );
 
     return SafeArea(
       child: Scaffold(
-        body: GestureDetector(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
-          },
-          child: Text('data'),
+        // body: GestureDetector(
+        //   onTap: () {
+        //     Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomeScreen()));
+        //   },
+        //   child: const Text('data'),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _screens,
         ),
         // appBar: _selectedIndex == 0 ? AppBar(
         //   title: const Text('All Workouts'),
@@ -213,62 +236,69 @@ class _BottomNavBarState extends State<BottomNavBar> {
         //         )
         //       : contentStack,
         // ),
-          bottomNavigationBar: NavigationBar(
-          elevation: 0,
-          height: 85,
-          surfaceTintColor: Colors.transparent,
-          // indicatorColor: AppColors.primary.withOpacity(0.1),
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-          backgroundColor: AppColors.primary.withOpacity(0.1),
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: (index) {
-            setState(
-              () {
-                _selectedIndex = index;
-              },
-            );
-          },
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.fitness_center_outlined),
-              selectedIcon: Icon(Icons.fitness_center),
-              label: 'Workouts',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.dashboard_customize_outlined),
-              selectedIcon: Icon(Icons.dashboard_customize),
-              label: "Create Splits",
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.restaurant_menu_outlined),
-              selectedIcon: Icon(Icons.restaurant_menu),
-              label: "Nutrition",
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.insights_outlined),
-              selectedIcon: Icon(Icons.insights),
-              label: "Progress",
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.person_outline),
-              selectedIcon: Icon(Icons.person),
-              label: "Profile",
-            )
-          ],
+        // bottomNavigationBar: NavigationBar(
+        // elevation: 0,
+        // height: 85,
+        // surfaceTintColor: Colors.transparent,
+        // // indicatorColor: AppColors.primary.withOpacity(0.1),
+        // labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+        // backgroundColor: AppColors.primary.withOpacity(0.1),
+        // selectedIndex: _selectedIndex,
+        // onDestinationSelected: (index) {
+        //   setState(
+        //     () {
+        //       _selectedIndex = index;
+        //     },
+        //   );
+        // },
+        // destinations: const [
+        //   NavigationDestination(
+        //     icon: Icon(Icons.fitness_center_outlined),
+        //     selectedIcon: Icon(Icons.fitness_center),
+        //     label: 'Workouts',
+        //   ),
+        //   NavigationDestination(
+        //     icon: Icon(Icons.dashboard_customize_outlined),
+        //     selectedIcon: Icon(Icons.dashboard_customize),
+        //     label: "Create Splits",
+        //   ),
+        //   NavigationDestination(
+        //     icon: Icon(Icons.restaurant_menu_outlined),
+        //     selectedIcon: Icon(Icons.restaurant_menu),
+        //     label: "Nutrition",
+        //   ),
+        //   NavigationDestination(
+        //     icon: Icon(Icons.insights_outlined),
+        //     selectedIcon: Icon(Icons.insights),
+        //     label: "Progress",
+        //   ),
+        //   NavigationDestination(
+        //     icon: Icon(Icons.person_outline),
+        //     selectedIcon: Icon(Icons.person),
+        //     label: "Profile",
+        //   )
+        // ],
+        //   bottomNavigationBar: AppBottomNavigationBar(
+        //   currentIndex: _selectedIndex,
+        //   onTap: _onDestinationSelected,
+        // ),
+        bottomNavigationBar: GymBottomNav(
+          currentIndex: _selectedIndex,
+          onTap: _onDestinationSelected,
         ),
       ),
     );
   }
 }
 
-class _QuickSlideItem {
-  const _QuickSlideItem({
-    required this.imageUrl,
-    required this.tabIndex,
-    required this.semanticLabel,
-  });
+// class _QuickSlideItem {
+//   const _QuickSlideItem({
+//     required this.imageUrl,
+//     required this.tabIndex,
+//     required this.semanticLabel,
+//   });
 
-  final String imageUrl;
-  final int tabIndex;
-  final String semanticLabel;
-}
+//   final String imageUrl;
+//   final int tabIndex;
+//   final String semanticLabel;
+// }

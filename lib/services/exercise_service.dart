@@ -15,7 +15,7 @@ class ExerciseService {
   // }
                                                                                   
   // GET EXERCISES BY MUSCLE GROUPS
-  static Future<List<Exercise>> getExerciseByMuscleGroups(
+  static Future<List<ExercisesClass>> getExerciseByMuscleGroups(
       String muscleGroup) async {
     final response = await ApiService.get(
       AppConstants.exercisesEndpoint,
@@ -32,11 +32,11 @@ class ExerciseService {
     if (listData is! List) {
       throw Exception('Unexpected exercise response format');
     }
-    return listData.whereType<Map<String, dynamic>>().map(Exercise.fromJson).toList();
+    return listData.whereType<Map<String, dynamic>>().map(ExercisesClass.fromJson).toList();
   }
 
   // GET EXERCISES BY ID
-  static Future<Exercise> getExerciseById(String exerciseId) async {
+  static Future<ExercisesClass> getExerciseById(String exerciseId) async {
     final response = await ApiService.get(
       '${AppConstants.exercisesEndpoint}/$exerciseId',
       includeAuth: false,
@@ -53,11 +53,11 @@ class ExerciseService {
       throw Exception('Unexpected exercise detail response error');
     }
 
-    return Exercise.fromJson(exerciseData);
+    return ExercisesClass.fromJson(exerciseData);
   }
 
   // GET EXERCISEX BY BODY PARTS
-  static Future<List<Exercise>> getExerciseByBodyparts(String bodypart) async {
+  static Future<List<ExercisesClass>> getExerciseByBodyparts(String bodypart) async {
     final response = await ApiService.get(
       '${AppConstants.bodypartEndpoint}$bodypart',
       includeAuth: false,
@@ -73,6 +73,6 @@ class ExerciseService {
     if(listData is! List) {
       throw Exception('Unexpected exercise response format');
     }
-    return listData.whereType<Map<String, dynamic>>().map(Exercise.fromJson).toList();
+    return listData.whereType<Map<String, dynamic>>().map(ExercisesClass.fromJson).toList();
   }
 }
