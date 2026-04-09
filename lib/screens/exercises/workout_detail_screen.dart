@@ -20,6 +20,7 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
+            height: MediaQuery.of(context).size.height,
             decoration: const BoxDecoration(
               color: AppColors.background,
             ),
