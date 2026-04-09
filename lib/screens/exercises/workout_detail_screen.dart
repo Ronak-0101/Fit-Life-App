@@ -163,7 +163,8 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
                               child: Image.asset(
                                 'assets/images/workout_cate/Shoulder.png',
                                 fit: BoxFit.cover,
-                                height: MediaQuery.of(context).size.height * 0.2,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
                                 width: MediaQuery.of(context).size.width * 0.3,
                               ),
                             ),
@@ -177,7 +178,8 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
                               child: Image.asset(
                                 'assets/images/workout_cate/Shoulder.png',
                                 fit: BoxFit.cover,
-                                height: MediaQuery.of(context).size.height * 0.2,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
                                 width: MediaQuery.of(context).size.width * 0.3,
                               ),
                             ),
@@ -316,28 +318,31 @@ class _WorkoutDetailScreenState extends State<WorkoutDetailScreen> {
                             children: [
                               Wrap(
                                 spacing: 10,
-                                children: exercise.muscleGroup!.map((muscle) {
-                                  return Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 9),
-                                    decoration: BoxDecoration(
-                                      color: muscle == exercise.muscleGroup!.first
-                                          ? Colors
-                                              .red // highlight first (like your UI)
-                                          : AppColors.widgetBG,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Text(
-                                      muscle.toUpperCase(),
-                                      style: GoogleFonts.montserrat(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        letterSpacing: 1,
+                                children: exercise.muscleGroup!.map(
+                                  (muscle) {
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 9),
+                                      decoration: BoxDecoration(
+                                        color: muscle ==
+                                                exercise.muscleGroup!.first
+                                            ? Colors
+                                                .red // highlight first (like your UI)
+                                            : AppColors.widgetBG,
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                    ),
-                                  );
-                                }).toList(),
+                                      child: Text(
+                                        muscle.toUpperCase(),
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          letterSpacing: 2,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
                               )
                             ],
                           )
