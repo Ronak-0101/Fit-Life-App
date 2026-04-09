@@ -40,7 +40,11 @@ dependencies:
   shared_preferences: ^2.5.3
   go_router: ^15.1.2
   intl: ^0.20.2
+<<<<<<< HEAD
   google_fonts: ^6.2.1
+=======
+  google_fonts: ^6.3.0
+>>>>>>> 94828a757db622dc96ab9d64bae8c09365a9de0b
 
 dev_dependencies:
   flutter_test:
