@@ -35,6 +35,8 @@ class _LoginScreenState extends State<LoginScreen> {
       password: _passwordController.text.trim(),
     );
 
+    if (!mounted) return;
+
     setState(() {
       _isLoading = false;
     });
@@ -65,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  // ignore: unused_element
   Future<bool> _checkApiConnection() async {
     try {
       debugPrint('🔍 Checking API connection...');
@@ -159,6 +162,19 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               const SizedBox(height: 5),
                               TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
+                                validator: (value) {
+                                  final email = value?.trim() ?? '';
+                                  if (email.isEmpty) {
+                                    return 'Please enter your email';
+                                  }
+                                  if (!email.contains('@')) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.all(
@@ -208,6 +224,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               const SizedBox(height: 5),
                               TextFormField(
+                                controller: _passwordController,
+                                textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (_) => _login(),
+                                validator: (value) {
+                                  if ((value ?? '').isEmpty) {
+                                    return 'Please enter your password';
+                                  }
+                                  return null;
+                                },
                                 decoration: InputDecoration(
                                   border: const OutlineInputBorder(
                                     borderRadius: BorderRadius.all(
@@ -244,8 +269,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         const SizedBox(height: 40),
+                        if (_errorMessage.isNotEmpty) ...[
+                          Text(
+                            _errorMessage,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                        ],
                         GestureDetector(
-                          onTap: () {},
+                          onTap: _isLoading ? null : _login,
                           child: Container(
                             alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width,
@@ -260,14 +296,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ],
                                 ),
                                 borderRadius: BorderRadius.circular(50)),
-                            child: Text(
-                              'LOGIN',
-                              style: GoogleFonts.montserrat(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.titleColor,
-                              ),
-                            ),
+                            child: _isLoading
+                                ? const SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      color: AppColors.titleColor,
+                                      strokeWidth: 2.5,
+                                    ),
+                                  )
+                                : Text(
+                                    'LOGIN',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.titleColor,
+                                    ),
+                                  ),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -277,8 +322,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             Expanded(
                               child: Container(
                                 height: 1.5,
-                                color:
-                                    AppColors.subtitleColor.withOpacity(0.35),
+                                color: AppColors.subtitleColor.withValues(
+                                  alpha: 0.35,
+                                ),
                               ),
                             ),
                             const Padding(
@@ -296,8 +342,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             Expanded(
                               child: Container(
                                 height: 1.5,
-                                color:
-                                    AppColors.subtitleColor.withOpacity(0.35),
+                                color: AppColors.subtitleColor.withValues(
+                                  alpha: 0.35,
+                                ),
                               ),
                             ),
                           ],
@@ -318,8 +365,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 60,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color:
-                                    AppColors.subtitleColor.withOpacity(0.35),
+                                color: AppColors.subtitleColor.withValues(
+                                  alpha: 0.35,
+                                ),
                               ),
                               color: AppColors.background,
                               borderRadius: BorderRadius.circular(50),

@@ -204,6 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                             child: Column(
                               children: [
                                 TextFormField(
+                                  controller: _nameController,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
@@ -227,6 +228,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 ),
                                 const SizedBox(height: 15),
                                 TextFormField(
+                                  controller: _emailController,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
@@ -250,6 +252,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 ),
                                 const SizedBox(height: 15),
                                 TextFormField(
+                                  controller: _passwordController,
                                   decoration: InputDecoration(
                                     border: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
@@ -290,6 +293,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 ),
                                 const SizedBox(height: 15),
                                 TextFormField(
+                                  controller: _conrirmPasswordController,
                                   decoration: InputDecoration(
                                     border: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(

@@ -7,7 +7,6 @@ import 'package:fit_life_app_/utils/storage.dart';
 // import 'api_service.dart';
 
 class AuthService {
-
   static Map<String, dynamic> _parseResponseBody(String body) {
     try {
       final decoded = jsonDecode(body);
@@ -18,6 +17,43 @@ class AuthService {
     } catch (_) {
       return {'raw': body};
     }
+  }
+
+  static String? _findString(Map<String, dynamic> data, List<String> keys) {
+    for (final key in keys) {
+      final value = data[key];
+      if (value is String && value.isNotEmpty) {
+        return value;
+      }
+    }
+
+    final nestedData = data['data'];
+    if (nestedData is Map<String, dynamic>) {
+      return _findString(nestedData, keys);
+    }
+
+    return null;
+  }
+
+  static Map<String, dynamic>? _findUserData(Map<String, dynamic> data) {
+    final user = data['user'];
+    if (user is Map<String, dynamic>) {
+      return user;
+    }
+
+    final nestedData = data['data'];
+    if (nestedData is Map<String, dynamic>) {
+      final nestedUser = nestedData['user'];
+      if (nestedUser is Map<String, dynamic>) {
+        return nestedUser;
+      }
+
+      if (nestedData.containsKey('email') || nestedData.containsKey('name')) {
+        return nestedData;
+      }
+    }
+
+    return null;
   }
 
   // Login User
@@ -37,27 +73,45 @@ class AuthService {
       // final responseData = jsonDecode(response.body);
       final responseData = _parseResponseBody(response.body);
 
-      if (response.statusCode == 200 && responseData['success'] == true) {
+      final isSuccessStatus =
+          response.statusCode >= 200 && response.statusCode < 300;
+      final isSuccessFlag = responseData['success'] != false;
+
+      if (isSuccessStatus && isSuccessFlag) {
         // Save token and user data
-        final token = responseData['token'];
-        final userData = responseData['user'];
+        final token = _findString(
+          responseData,
+          ['token', 'accessToken', 'access_token', 'jwt'],
+        );
+        final userData = _findUserData(responseData);
+
+        if (token == null) {
+          return {
+            'success': false,
+            'message': 'Login succeeded but no auth token was returned',
+          };
+        }
 
         await StorageService.saveToken(token);
-        await StorageService.saveUserData(
-          userId: userData['id'],
-          email: userData['email'],
-          name: userData['name'],
-        );
+
+        if (userData != null) {
+          await StorageService.saveUserData(
+            userId: (userData['_id'] ?? userData['id'] ?? '').toString(),
+            email: (userData['email'] ?? email).toString(),
+            name: (userData['name'] ?? '').toString(),
+          );
+        }
 
         return {
           'success': true,
-          'message': 'Login Successfull',
-          'user': User.fromJson(userData)
+          'message': responseData['message'] ?? 'Login successful',
+          'user': userData == null ? null : User.fromJson(userData),
         };
       } else {
+        final fallback = responseData['raw']?.toString();
         return {
           'success': false,
-          'message': responseData['message'] ?? 'Login failed',
+          'message': responseData['message'] ?? fallback ?? 'Login failed',
         };
       }
     } catch (e) {
@@ -87,7 +141,8 @@ class AuthService {
 
       // final responseData = jsonDecode(response.body);
       final responseData = _parseResponseBody(response.body);
-      final isSuccessStatus = response.statusCode >= 200 && response.statusCode < 300;
+      final isSuccessStatus =
+          response.statusCode >= 200 && response.statusCode < 300;
       final isSuccessFlag = responseData['success'] != false;
 
       if (isSuccessStatus && isSuccessFlag) {
@@ -101,7 +156,8 @@ class AuthService {
         final fallback = responseData['raw']?.toString();
         return {
           'success': false,
-          'message': responseData['message'] ?? fallback ?? 'Registration Failed',
+          'message':
+              responseData['message'] ?? fallback ?? 'Registration Failed',
         };
       }
     } catch (e) {

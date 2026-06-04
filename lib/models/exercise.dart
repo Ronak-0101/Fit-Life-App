@@ -28,7 +28,7 @@ Exercises copyWith({  bool? success,
 );
   bool? get success => _success;
   List<Exercises>? get exercises => _exercises;
-
+  
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['success'] = _success;
